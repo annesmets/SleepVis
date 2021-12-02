@@ -2,7 +2,7 @@
 
 ![image](https://user-images.githubusercontent.com/34477812/144436385-54e8984f-e52d-4c05-b996-6f1cba96a06e.png)
 
-The input shoudl be a JSON file of the following format:
+The input should be a JSON file of the following format:
 ```
 [
   {"id": 5960, 
