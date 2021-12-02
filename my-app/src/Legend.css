@@ -1,0 +1,11 @@
+.info {
+    padding: 6px 8px;
+    background: white;
+    /* border-radius: 5px; */
+  }
+  
+  .legend {
+    text-align: left;
+    /* line-height: 18px; */
+    color: #555;
+  }

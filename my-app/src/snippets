@@ -1,0 +1,815 @@
+    // useEffect(() => {
+    //   fetch(url)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       setData(data);
+    //     });
+    // },[]);
+    ==> fetch data without using d3.json()
+
+
+// import data from './data.json'
+
+// const pilotdata = data.map(d => {
+//     d.Latitude = +d.Latitude;
+//     d.Longitude = +d.Longitude;
+//     d.acc = +d.acc;
+//     d.client_id = +d.client_id;
+//     d.id = +d.id;
+//     d.lights_off = new Date(d.lights_off);
+//     d.lights_on = new Date(d.lights_on);
+//     d.quality = +d.quality;
+//     d.rested = +d.rested;
+//     d.states.map(s => {
+//         s.start = new Date(s.start)
+//         s.end = new Date(s.end)
+//     })
+// })
+
+
+ // GET DATA
+
+    // Every time the app is rendered, it will fetch the data, 
+    // and pass it into setData.
+    // The data value below will either be null (no data loaded) or the data after its loaded
+    const [data,setData] = useState([]);   
+
+    // useEffect is a react hook, when you want to have a side effet (a network request)
+    // If we have a changing url, we want the effect every time the url changes
+    // Right now, we will only want the url once, we need the function that fetches the json file
+    // and an empty array.
+    useEffect(() => {
+    d3.json(url).then(setData);
+    },[]);
+
+    // Convert data
+    data.map(d => {
+    return(
+        d.Latitude = +d.Latitude,
+        d.Longitude = +d.Longitude,
+        d.acc = +d.acc,
+        d.client_id = +d.client_id,
+        d.id = +d.id,
+        d.lights_off = new Date(d.lights_off),
+        d.lights_on = new Date(d.lights_on),
+        d.quality = +d.quality,
+        d.rested = +d.rested,
+        d.states.map(s => {
+        return(
+            s.start = new Date(s.start),
+            s.end = new Date(s.end)
+        )
+        })
+    )
+    });
+
+    console.log(data)
+
+
+
+// import React, { Component } from 'react'
+
+// I keep a constant object like this to use margins in my vis.
+// It was very common in the old examples of D3 to use these.
+// With Object.freeze we make sure that we do not change it in the code,
+// that is, a constant.
+// const margins = Object.freeze({
+//     top: 20,
+//     bottom: 20,
+//     right: 20,
+//     left: 30,
+// });
+
+// const D3Timeline = (data) => {
+
+//     console.log(data)
+
+//     return (
+//         <div>
+            
+//         </div>
+//     )
+
+// }
+
+// export default D3Timeline
+
+
+    // jDBSCAN
+    // let dbscanner = jDBSCAN()
+    //     .eps(0.75)
+    //     .minPts(0.1)
+    //     .distance('EUCLIDEAN')
+    //     .data(vectors);
+
+    // let point_assignment_result = dbscanner();
+    // console.log(point_assignment_result);
+
+    // let cluster_centers = dbscanner.getClusters();
+    // console.log(cluster_centers);
+
+{/* <button onClick={() => setData(data.filter(d => d.client_id === 1144))}>Filter data</button> */}
+
+
+  const distinctClientId = [...new Set(data.map(d => d.client_id))];
+
+  const [selection, setSelection] = useState([]);
+  const selectData = (selectedClientId) => {
+    console.log(selectedClientId);
+    setSelection(data.filter(d => d.client_id === selectedClientId));
+  };
+
+          {/* <div className='col1'></div>
+        <div className='col2'></div>
+        <div className='col3'></div> */}
+      {/* <div className="dashboard page-container"></div> */}
+
+
+        {/* The timeline with children that need the brush selection */}
+        <AutoSizer>
+            {({ width, height }) => 
+              <>
+                <Timeline data={data} width={width} height={height/2}>
+                  {(selection) => 
+                    <> 
+                      <TimelineChild data={data} selection={selection} width={width} height={height/2} />
+
+                      {/* Select parameter for the scatterplot */}
+                      {/* <select id='paramselector' selected={'quality'} onChange={event => setSelectedParam(event.target.value)}>
+                        <option value={'quality'}>Sleep Quality</option>
+                        <option value={'rested'}>Well rested</option>
+                        <option value={'sit'}>Sleep Intention Time</option>
+                        <option value={'tst'}>Total Sleep Time</option>
+                      </select>
+
+                      <Scatterplot data={data} selection={selection} parameter={selectedParam} width={width} height={height/3} />  */}
+                    </>
+                  }
+                </Timeline>
+
+                {/* The M&M method */}
+                {/* <MM data={data}/>  */}
+
+                {/* Calendar heatmap */}
+                {/* <Calendar data={data}/> */}
+
+                {/* Select X parameter for the Cluster scatterplot */}
+                <select id='clusterXparamselector' onChange={event => setclusterYParam(event.target.value)}>
+                  <option value={'quality'}>Sleep quality</option>
+                  <option value={'rested'}>Well rested</option>
+                  <option value={'tib'}>Total time in bed</option>
+                  <option value={'tst'}>Total sleep time</option>
+                  <option value={'taib'}>Total time awake in bed</option>
+                  <option value={'sit'}>Total sleep intention time</option>
+                  <option value={'sol'}>Sleep onset latency</option>
+                  <option value={'se'}>Sleep efficiency</option>
+                </select>
+
+                {/* Select Y parameter for the Cluster scatterplot */}
+                <select id='clusterYparamselector' onChange={event => setclusterXParam(event.target.value)}>
+                  <option value={'quality'}>Sleep quality</option>
+                  <option value={'rested'}>Well rested</option>
+                  <option value={'tib'}>Total time in bed</option>
+                  <option value={'tst'}>Total sleep time</option>
+                  <option value={'taib'}>Total time awake in bed</option>
+                  <option value={'sit'}>Total sleep intention time</option>
+                  <option value={'sol'}>Sleep onset latency</option>
+                  <option value={'se'}>Sleep efficiency</option>
+                </select>
+
+                {/* Select parameter for the Cluster scatterplot */}
+                <select id='clusterparamselector' onChange={event => setclusterParam(event.target.value)}>
+                  <option value={'quality'}>Sleep quality</option>
+                  <option value={'rested'}>Well rested</option>
+                  <option value={'tib'}>Total time in bed</option>
+                  <option value={'tst'}>Total sleep time</option>
+                  <option value={'taib'}>Total time awake in bed</option>
+                  <option value={'sit'}>Total sleep intention time</option>
+                  <option value={'sol'}>Sleep onset latency</option>
+                  <option value={'se'}>Sleep efficiency</option>
+                  <option value={'none'}>None</option>
+                </select>
+
+                {/* Simple K-means clustering with scatterplot */}
+                <Clustering 
+                  data={data} 
+                  width={width}  
+                  height={height/3} 
+                  yparam={clusterYParam} 
+                  xparam={clusterXParam} 
+                  clusparam={clusterParam}
+                />
+              </>
+            }
+          </AutoSizer>
+
+          https://aesalazar.com/blog/professional-color-combinations-for-dashboards-or-mobile-bi-applications
+
+
+{/* Left menu */}
+        <div className='flexbox-column-1'>
+          <div className='flexbox-item flexbox-item-1'>
+            {/* Select X parameter for the Cluster scatterplot */}
+            {/* <p>Select x variable:</p>
+            <select id='clusterXparamselector' onChange={event => setclusterXParam(event.target.value)}>
+              <option disabled>Choose x variable</option>
+              <option value={'quality'}>Sleep quality</option>
+              <option value={'rested'}>Well rested</option>
+              <option value={'tib'}>Total time in bed</option>
+              <option value={'tst'}>Total sleep time</option>
+              <option value={'taib'}>Total time awake in bed</option>
+              <option value={'sit'}>Total sleep intention time</option>
+              <option value={'sol'}>Sleep onset latency</option>
+              <option value={'se'}>Sleep efficiency</option>
+            </select> */}
+
+            {/* Select Y parameter for the Cluster scatterplot */}
+            {/* <p>Select y variable:</p>
+            <select id='clusterYparamselector' onChange={event => setclusterYParam(event.target.value)}>
+              <option disabled>Choose y variable</option>
+              <option value={'quality'}>Sleep quality</option>
+              <option value={'rested'}>Well rested</option>
+              <option value={'tib'}>Total time in bed</option>
+              <option value={'tst'}>Total sleep time</option>
+              <option value={'taib'}>Total time awake in bed</option>
+              <option value={'sit'}>Total sleep intention time</option>
+              <option value={'sol'}>Sleep onset latency</option>
+              <option value={'se'}>Sleep efficiency</option>
+            </select> */}
+
+            {/* Select parameter for the Cluster scatterplot */}
+            <p>Select cluster variable:</p>
+            <select id='clusterparamselector' onChange={event => setclusterParam(event.target.value)}>
+              <option disabled>Choose cluster variable</option>
+              <option value={'quality'}>Sleep quality</option>
+              <option value={'rested'}>Well rested</option>
+              <option value={'tib'}>Total time in bed</option>
+              <option value={'tst'}>Total sleep time</option>
+              <option value={'taib'}>Total time awake in bed</option>
+              <option value={'sit'}>Total sleep intention time</option>
+              <option value={'sol'}>Sleep onset latency</option>
+              <option value={'se'}>Sleep efficiency</option>
+              <option value={'none'}>None</option>
+            </select>
+          </div>
+
+          {/* MM */}
+          {/* <div className='flexbox-item flexbox-item-5'>
+          <AutoSizer>
+              {({ width, height }) => 
+                <MM 
+                data={data}
+                width={width}
+                height={height} 
+                />
+              }
+            </AutoSizer>
+          </div> */}
+        </div>
+
+
+
+//////////////////////////////// Aggregation ///////////////////////////////
+
+    const offset = [0]
+    grouped.forEach(d => {
+        offset.push(d.size);
+    })
+
+    const barHeight = innerHeight/data.length * 2;
+
+    const y = d3.scaleOrdinal()
+        .range(offset.map((d,i,a) => a.slice(0, (i+1)).reduce((acc, cur) => acc+cur, 0) * barHeight))
+        .domain([...data.keys()])
+
+    console.log(y.range())
+
+    const yAxis = (g) => g.call(d3.axisLeft(y))
+
+    g.select('g.yAxis')
+        .call(yAxis)
+        .attr('transform', `translate(${margins.left}, 0)`)
+
+//////////////////////////////// Aggregation 2 ///////////////////////////////
+// Define y axis scale for the clusters
+    const yc = d3.scaleBand()
+        .domain(data.map(d => d.cluster))
+        .range([innerHeight, 0])
+        .padding(0.2);      // Padding between the clusters
+
+    // Define y axis scale for the clusters
+    const yt = d3.scaleBand()
+        .domain(data.map(d => d.id))
+        .range([yc.bandwidth(), 0])
+
+    console.log(yt.range())
+
+    // Define the x axis scale
+    const x = d3.scaleTime()
+        .domain([minTime, maxTime])
+        .range([padding, innerWidth-padding]); 
+
+    const svgAggregation = useRef();
+    const svg = select(svgAggregation.current)
+    const g = select(svgAggregation.current).attr('transform', `translate(0,${margins.top})`);
+
+    const yAxisCluster = (g) => g.call(axisLeft(yc));
+    const yAxisRow = (g) => g.call(axisLeft(yt));
+    const xAxis = (g) => g.call(axisBottom(x));
+
+    // Create g element for each cluster
+    const cluster = content
+        .selectAll('.cluster')
+        .data(data, d => d.cluster)
+        .join('g')
+        .attr('class', 'cluster')
+        .attr('transform', d => `translate(${margins.left}, ${yc(d.cluster)})`)
+
+    // // Create g element for each sequence
+    // cluster
+    //     .selectAll('.row')
+    //     .data(d => d.id)
+    //     .join('g')
+    //     .attr('class', 'row')
+    //     .attr('transform', d => `translate(0, ${yt(d.id)})`)
+
+    // Add rect for each state
+    // cluster
+    //     .selectAll('.state')
+    //     .data(d => d.states)
+    //     .join('rect')
+    //     .attr('class', 'state')
+    //     .attr('y', 0)
+    //     .attr('x', d => x(d.start_clus))
+    //     .attr('width', d => x(d.end_clus)-x(d.start_clus))
+    //     .attr('height', yc.bandwidth())
+    //     .attr('fill', d => color(d.state))
+
+//////////////////////////////// Return parent component 13-5-2021 ///////////////////////////////
+  return(
+    <DataProvider>
+      <div className="flexbox-container">
+
+      {/* Visualization content */}
+      <div className='flexbox-vis-container'>  
+
+        {/* Second column */}
+        <div className='flexbox-column-2'>
+          {/* Clustering */}
+          {/* <div className='flexbox-item flexbox-item-2'>
+            <AutoSizer>
+              {({ width, height }) => 
+                <Clustering 
+                  data={data.filter(d => d.states.length > 0)} 
+                  width={width}  
+                  height={height} 
+                  yparam={yParam} 
+                  xparam={xParam} 
+                  clustlevel={clustLevel}
+                  id={selectedId}
+                  onXSelected={(xparam) => setXParam(xparam)}
+                  onYSelected={(yparam) => setYParam(yparam)}
+                  onClustLevelSelected={(clustLevel) => setClustLevel(clustLevel)}
+                  onIdSelected={(id) => setSelectedId(id)}
+                  clusparam={clusterParam}
+                  date={selectedDate}
+                  dots={selectedDots}
+                  onDotsSelected={(dots) => setSelectedDots(dots)}
+                  epsilon={epsilon}
+                  onEpsilonSelected={(epsilon) => setEpsilon(epsilon)}
+                />
+              }
+            </AutoSizer>
+          </div> */}
+
+          {/* PCP */}
+          <div className='flexbox-item flexbox-item-3'>
+            <AutoSizer>
+              {({ width, height }) => 
+                <PCP 
+                  width={width}  
+                  height={height-31} 
+                  keys={keys}
+                  onKeysSelected={(keys) => setKeys(keys)}
+                  data={data.filter(d => d.states.length > 0)} 
+                  epsilon={epsilon}
+                  //time
+                  clustLevel={clustLevel}
+                  //location
+
+                  // onSetBrushSelection={(brushSelection) => setBrushSelection(brushSelection)}
+                  // brushSelection={brushSelection}
+                />
+              }
+            </AutoSizer>
+          </div>
+
+          <div className='flexbox-item flexbox-item-radio'>
+              <RadioButtons
+                clustLevel={clustLevel}
+                onClustLevelSelected={(clustLevel) => setClustLevel(clustLevel)}
+              />
+          </div>
+
+          {/* Map */}
+          <div className='flexbox-item flexbox-item-3'>
+              <Map 
+                data={data} 
+                date={selectedDate} 
+                clustLevel={clustLevel}
+                id={selectedId} 
+                onMarker={(data) => setData(data)}          
+              />
+          </div>
+        </div>
+
+        {/* Third column */}
+        <div className='flexbox-column-3'>
+          <div className='flexbox-item flexbox-item-6'>
+            <AutoSizer>
+              {({ width, height }) => 
+                <Calendar
+                  width={width}
+                  height={height} 
+
+                  data={data.filter(d => d.states.length > 0)}
+                  id={selectedId}
+
+                  date={selectedDate}
+                  onDateSelected={(date) => setSelectedDate(date)}
+                />
+              }
+            </AutoSizer>
+          </div>
+
+          {/* MM */}
+          {/* <div className='flexbox-item flexbox-item-5'>
+          <AutoSizer>
+              {({ width, height }) => 
+                <MM 
+                data={data.filter(d => d.states.length > 0)}
+                width={width}
+                height={height} 
+                // onDataClustered={(data) => setClusteredData(data)}
+                />
+              }
+            </AutoSizer>
+          </div> */}
+
+          {/* Streamgraph */}
+          {/* <div className='flexbox-item flexbox-item-5'>
+          <AutoSizer>
+              {({ width, height }) => 
+                <Streamgraph 
+                  data={data.filter(d => d.states.length > 0)}
+                  width={width}
+                  height={height}
+                />
+              }
+            </AutoSizer>
+          </div> */}
+
+          {/* Timeline */}
+          {/* <div className='flexbox-item flexbox-item-4'>
+            <AutoSizer>
+              {({ width, height }) => 
+                <TimelineChild 
+                  data={data.filter(d => d.states.length > 0)} 
+                  date={selectedDate} 
+                  width={width} 
+                  height={height}
+                  yparam={yParam} 
+                  xparam={xParam}
+                  dots={selectedDots} 
+                  id={selectedId}
+                  clustlevel={clustLevel}
+                />
+              }
+            </AutoSizer>
+          </div> */}
+
+          <div className='flexbox-item flexbox-item-4'>
+            <AutoSizer>
+              {({ width, height }) => 
+                <Aggregation 
+                  width={width} 
+                  height={height}
+
+                  data={data.filter(d => d.states.length > 0)} 
+                  date={selectedDate}
+                  clustlevel={clustLevel}
+                  id={selectedId}
+  
+                  epsilon={epsilon} 
+                  onEpsilonSelected={(epsilon) => setEpsilon(epsilon)}
+                />
+              }
+            </AutoSizer>
+          </div>
+
+          <div className='flexbox-item flexbox-item-4'>
+            <AutoSizer>
+              {({ width, height }) => 
+                <Hierarchy 
+                  width={width} 
+                  height={height}
+
+                  data={data.filter(d => d.states.length > 0)} 
+                  date={selectedDate}
+                  clustlevel={clustLevel}
+                  id={selectedId}
+  
+                  epsilon={epsilon} 
+                  onEpsilonSelected={(epsilon) => setEpsilon(epsilon)}
+                />
+              }
+            </AutoSizer>
+          </div>
+
+        </div>
+      </div>
+      </div>
+    </DataProvider>
+    
+  );
+
+  //////////////////////////////// Alternative Calendar legend 27-5-2021 ///////////////////////////////
+              // // Create legend
+            // const legend = svg.append('image')
+            //     .attr('class', 'legend')
+            //     .attr('transform', `translate(${width-250}, ${height-40})`)
+            //     .attr("width", 100)
+            //     .attr("height", legendSize)
+            //     .attr("preserveAspectRatio", "none")
+            //     .attr("xlink:href", ramp(color).toDataURL());
+
+            // svg.append('g')
+            //     .attr('class', 'legendTicks')
+            //     .attr('transform', `translate(${width-250}, ${height-40})`)
+            //     // .selectAll('.legendTicks')
+            //     // .join('g') 
+            //     .call(axisBottom(color)
+
+            //         .tickSize(6)
+            //         .ticks(6))  
+            //     // .call(g => g.select(".domain").remove())
+            //     .call(g => g.append("text")
+            //         .attr("x", 0)
+            //         .attr("y", 0)
+            //         .attr("fill", "currentColor")
+            //         .attr("text-anchor", "start")
+            //         .attr("font-weight", "bold")
+            //         .text('Sleep'));  
+
+            // legend.append('rect')
+            //     .attr('class', 'legendrect')
+            //     .data([...Array(maxCount + 1).keys()])
+            //     .join('rect')
+            //         .attr('class', 'legend')
+            //         .attr('x', (d, i) => i*(legendSize+5))
+            //         .attr('width', legendSize)
+            //         .attr('height', legendSize)
+            //         .attr('fill', d => color(d))
+            //         .attr("stroke", 'white');
+
+            // legend.append('text')
+            //     .attr('class', 'legendtext')
+            //     .data([...Array(maxCount + 1).keys()])
+            //     .join('text')
+            //     .attr('x', (d,i) => 4+ i * (legendSize+5))
+            //     .attr('y', -2)
+            //     .attr('font-size', '12px')
+            //     .text(d => d)
+
+              let legend = d3.legendColor()
+                .scale(color)
+                .cells(10)
+                .orient('horizontal')
+                .shapeWidth(legendSize)
+                .shapePadding(5)
+                // .labelFormat(d3.format('.2f'))
+
+  //////////////////////////////// Alternative Calendar legend 31-5-2021 ///////////////////////////////
+
+                            // // Create legend
+            // const legend = svg.append('g')
+            //     .attr('class', 'legend')
+            //     .attr('transform', `translate(${width-300}, ${height-40})`)
+
+            // legend.selectAll('.legendrect')
+            //     .attr('class', 'legendrect')
+            //     .data([0,0,0,0,0])
+            //     .join('rect')
+            //         .attr('x', (d, i) => i*(legendSize+5))
+            //         .attr('width', legendSize)
+            //         .attr('height', legendSize)
+            //         .attr('fill', (d,i) => color(i * colorDomainStep))
+            //         .attr("stroke", 'white');
+            
+            // legend.selectAll('.legendtext')
+            //     .attr('class', 'legendtext')
+            //     .data(['less', 'more'])
+            //     .join('text')
+            //         .attr('x', (d,i) => legendSize*(i * 9 -2))
+            //         .attr('y', 0.7 * legendSize)
+            //         .attr('font-size', '12px')
+            //         .text(d => d)
+
+  //////////////////////////////// Old brush scatterplot 9-6-2021 ///////////////////////////////
+
+
+            // // Brush
+            // const brush = d3.brush()
+            // .extent([[0,0], [innerWidth, innerHeight]])
+            // .on('end', (e,d) => {
+            //     if (e.selection) {
+            //         const brushSelection = e.selection;                                // To make sure we don't get an error if we click outside the brush area
+            //         setSelection([
+            //             [x.invert(brushSelection[0][0]), y.invert(brushSelection[0][1])], 
+            //             [x.invert(brushSelection[1][0]), y.invert(brushSelection[1][1])]]);  // To transform the pixel values to time values
+            //     };
+            // });
+
+            // if (previousSelection === selection ) {                             // Only call this code if the selection is not changing, otherwise you get an infinite loop
+            //     svg.select('g.brush')
+            //         .call(brush)
+            //         .call(brush.move, [[x.invert(selection[0][0]), y.invert(selection[0][1])], [x.invert(selection[1][0]), y.invert(selection[1][1])]])
+            //         .attr('transform', `translate(${margins.left}, ${margins.top})`);
+            // };
+
+
+  //////////////////////////////// Old radiobuttons 30-6-2021 ///////////////////////////////
+
+            {/* <div className='level'>
+              <label>Grouping: </label>
+              <input 
+                type='radio' 
+                value={'night'} 
+                onChange={e => changeLevel(e)}
+                name='level'
+                defaultChecked
+              /> No grouping
+              <input 
+                type='radio' 
+                value={'individual'} 
+                onChange={e => changeLevel(e)} 
+                name='level'
+              /> Group by individual
+              <input 
+                type='radio'
+                value={'cluster'}
+                onChange={e => changeLevel(e)} 
+                name='level'
+              /> Group by cluster
+            </div> */}
+
+            {/* <div className='mapDropdown'> */}
+                {/* <p>Choose a parameter to display on the map: </p>
+                <select id='mapColor' onChange={(e) => changeMapColor(e.target.value)}>
+                    <option disabled>Choose color of the map</option>
+                    <option value={'se'}>Sleep efficiency</option>
+                    <option value={'sol'}>Sleep onset latency</option>
+                    <option value={'quality'}>Sleep quality</option>
+                    <option value={'iwib'}>Total intended wake in bed time</option>
+                    <option value={'sit'}>Total sleep intention time</option>
+                    <option value={'tst'}>Total sleeping time</option>
+                    <option value={'tib'}>Total time in bed</option>
+                    <option value={'taib'}>Total time awake in bed</option>
+                    <option value={'waso'}>Wake after sleep onset</option>
+                    <option value={'rested'}>Well rested</option>
+                </select> */}
+            {/* </div> */}
+
+
+  //////////////////////////////// Aggregation view 30-6-2021 ///////////////////////////////
+                        // // Add the marker for lights off
+            // content    
+            //     .selectAll('.offMarker')
+            //     .data(data, d => d.lights_off_clus)
+            //     .join('rect')
+            //     .attr('class', 'offMarker')
+            //     .attr('x', d => x(d.lights_off_clus))
+            //     .attr('y', d => yc(d.cluster) + y[d.cluster](d.id))
+            //     .attr('width', 2)
+            //     .attr('height', d => d.height)
+            //     .attr('fill', 'orange')
+            //     .raise()
+            //     .on('click', (d,e) => console.log(e))
+
+            // // Add the marker for lights on
+            // content    
+            //     .selectAll('.onMarker')
+            //     .data(data, d => d.lights_on_clus)
+            //     .join('rect')
+            //     .attr('class', 'onMarker')
+            //     .attr('x', d => x(d.lights_on_clus))
+            //     .attr('y', d => yc(d.cluster) + y[d.cluster](d.id))
+            //     .attr('width', 2)
+            //     .attr('height', d => d.height)
+            //     .attr('fill', 'red')
+            //     .raise()
+
+                        // Zoom
+            const zoomBehavior = d3.zoom()
+                .scaleExtent([1, 100])                                                      // Add limit to zoom behavior
+                .translateExtent([[margins.left,0], [innerWidth, innerHeight]])             // Add limit to pan behavior
+                .on('zoom', () =>{
+                    const zoomState = d3.zoomTransform(svg.node());
+                    setCurrentZoomState(zoomState);
+                });
+
+            // svg.call(zoomBehavior);
+
+
+                        // Add title to the x axis
+            // svg.selectAll('.xTitle')
+            //     .data(['Time'])
+            //     .join('text')
+            //     .attr('class', 'xTitle')
+            //     .attr('x', width/2)
+            //     .attr('y', innerHeight + margins.bottom + 10)
+            //     .attr('text-anchor', 'middle')
+            //     .text(d => d)
+
+
+  //////////////////////////////// App load data 3 categories 21-7-2021 ///////////////////////////////
+
+              // // Convert data
+  // data.map(d => {
+  // return(
+  //     d.tib = 0,  //Total time in bed
+  //     d.tst = 0,  //Total sleep time
+  //     d.taib = 0, //Total time awake in bed
+  //     d.sit = 0,  //Total sleep intention time
+  //     d.sol = 0,  //Sleep onset latency
+  //     d.sc = 0,   //Sleep count
+  //     d.ac = 0,   //Awake count
+  //     d.oob = 0,  //Total time out of bed
+  //     d.se = 0,   //Sleep efficiency
+  //     d.waso = 0, //Wake after sleep onset
+  //     d.iwib = 0,   //Total intended wake in bed time
+  //     d.Latitude = +d.Latitude,
+  //     d.Longitude = +d.Longitude,
+  //     d.Latitude_zip = +d.Latitude_zip,
+  //     d.Longitude_zip = +d.Longitude_zip,
+  //     d.zip = +d.zip,
+  //     d.acc = +d.acc,
+  //     d.dist = d.zip === 0 ? 0 : distance(51.44873543911078, 5.374131755515852, d.Latitude, d.Longitude),
+  //     d.client_id = +d.client_id,
+  //     d.id = +d.id,
+  //     d.off = d.lights_off,
+  //     d.on = d.lights_on,
+  //     d.lights_off = new Date(d.lights_off),
+  //     d.lights_on = new Date(d.lights_on),
+  //     d.lights_off_clus = d.lights_on.getDate() !== d.lights_off.getDate() 
+  //       ? new Date(2020, 1, 1, d.lights_off.getHours(), d.lights_off.getMinutes())
+  //       : new Date(2020, 1, 2, d.lights_off.getHours(), d.lights_off.getMinutes()),
+  //     d.lights_on_clus = new Date(2020, 1, 2, d.lights_on.getHours(), d.lights_on.getMinutes()),
+  //     d.month = (d.lights_on).getMonth() + 1,
+  //     d.date = formatDate(d.lights_on),
+  //     d.quality = +d.quality,
+  //     d.rested = +d.rested,
+  //     d.states_array = [],
+  //     d.sit = Math.floor((d.lights_on - d.lights_off) / (1000*60)),   //Sleep intention time in minutes
+  //     d.states.map(s => {
+  //       d.states_array.push(s.state) 
+  //       s.start = new Date(s.start)
+  //       s.end = new Date(s.end)
+  //         if (s.state === 'sleep') {
+  //             d.tst = d.tst + Math.floor((s.end - s.start) / (1000*60));
+  //             d.fa = s.end;
+  //             d.sc = d.sc + 1;
+  //             if (d.sc === 1) {
+  //                 d.so = s.start;
+  //                 d.sol = Math.abs(Math.floor((s.start - d.lights_off) / (1000*60)));
+  //             }
+  //         }
+  //         if (s.state === 'awakeInBed') {
+  //             d.taib = d.taib + Math.abs(Math.floor((s.end - s.start) / (1000*60)));
+  //             d.ac = d.ac + 1;
+  //         }
+  //         s.start_clus = d.lights_on.getDate() !== s.start.getDate() 
+  //           ? s.start_clus = new Date(2020, 1, 1, s.start.getHours(), s.start.getMinutes()) 
+  //           : s.start_clus = new Date(2020, 1, 2, s.start.getHours(), s.start.getMinutes())
+  //         s.end_clus = d.lights_on.getDate() !== s.end.getDate()
+  //           ? s.end_clus = new Date(2020, 1, 1, s.end.getHours(), s.end.getMinutes())
+  //           : s.end_clus = new Date(2020, 1, 2, s.end.getHours(), s.end.getMinutes())
+  //     }),
+  //     d.tib = d.tst + d.taib,
+  //     d.oob = d.sit - d.tib,
+  //     d.waso = d.tst === 0 ? 0 : Math.floor((d.fa - d.so) / (1000*60))- d.tst,
+  //     d.tasafa = d.tst === 0 ? 0 : Math.abs(Math.floor((d.fa - d.lights_on) / (1000*60))),
+  //     d.dse = d.tst === 0 ? 0 : d.sol + d.tst + d.waso + d.tasafa,
+  //     d.se = d.tst === 0 ? 0 : d.tst / d.dse,
+  //     d.iwib = d.tib - d.sit < 0 ? 0 : d.tib - d.sit
+  // )});
+
+  // Convert the interval data
+  // intData.map(i => {
+  //   return (
+  //     i.states.map(j => {
+  //       j.start = new Date(j.start)
+  //       j.end = new Date(j.end)
+  //     })
+  //   )
+  // })

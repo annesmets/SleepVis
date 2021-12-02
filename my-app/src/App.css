@@ -1,0 +1,185 @@
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+/* Page layout */
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.flexbox-container {
+    height: 100%;
+    display: flex;            
+    flex-direction: column;
+}
+
+.flexbox-vis-container {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    background-color: #d6d6d6;
+    padding: 5px;
+}
+
+.flexbox-item {
+    margin: 5px;
+    padding: 5px;
+    background-color: white;
+}
+
+/* Left menu */
+.flexbox-column-1 {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.flexbox-column-2 {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.flexbox-column-3 {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+/* Clustering */
+.flexbox-item-2 {
+    height: 50%;
+    flex-grow: 1;           /*Gets bigger when there's left over space*/
+}
+
+/* Map & plot*/
+.flexbox-item-3 {
+    padding: 0;
+    height: 50%;
+    flex-grow: 1;           /*Gets bigger when there's left over space*/
+    margin-top: 0px;
+}
+
+/* Timeline */
+.flexbox-item-4 {
+    min-height: 250px;
+    height: 70%;
+    flex-grow: 1;           /*Gets bigger when there's left over space*/
+    margin-top: 0px;
+}
+
+/* Icicle */
+.flexbox-item-icicle {
+    min-height: 100px;
+    height: 55%;
+    flex-grow: 1;           /*Gets bigger when there's left over space*/
+    margin-top: 0px;
+}
+
+/* MM method */
+.flexbox-item-5 {
+    height: 30%;    
+}
+
+/* Calendar */
+.flexbox-item-6 {
+    min-height: 200px;
+    height: 20%;
+    flex-grow: 0;           /*Gets bigger when there's left over space*/
+}
+
+/* Radio buttons */
+.flexbox-item-radio {
+    min-height: 80px;
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+/* Epsilon slider */
+.flexbox-item-epsilon {
+    min-height: 75px;
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+/* PCP or scatterplot radio buttons */
+.flexbox-item-plot {
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+.flexbox-item-alignment {
+    text-align: left;
+    min-height: 80px;
+    margin-bottom: 0px;
+}
+
+.flexbox-item-plot-dropdown {
+    text-align: left;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+/* Map Style */
+
+#mapid { 
+    height: 100%; 
+    width: 100%;
+}
+
+.leaflet-layer {
+    filter: grayscale(100%);
+}
+
+.leaflet-container {
+    height: 100%;
+}
+
+p {
+    color: #202020;
+}
+
+.legendContainer {
+    padding: 5px;
+    background: white;
+    opacity: 1;
+}
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+/* Axis Style */
+
+/* Styling of the axes */
+.xAxis, .yAxis {
+    /* font-size: 12px; */
+    font-weight: demi;
+    color: #333;
+}
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+/* Radio button Style */
+
+.radioComponent, .plotComponent, .aggregationComponent, .subjectComponent {
+    display: flex;
+}
+
+.averageMap, .averagePlot, .includeNoise {
+    width: 55%;
+}
+
+.mapDropdown, .plotOption {
+    width: 45%;
+}
+
+.clientDropdown {
+    width: 45%;
+}
+
+.viewOption, .groupOption {
+    width: 50%
+}
