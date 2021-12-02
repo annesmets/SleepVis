@@ -21,3 +21,4 @@ The input shoudl be a JSON file of the following format:
     "lights_on": "2021-08-22 07:35:00"}
 ]
 ```
+More about this project can be read [here](https://github.com/annesmets/SleepVis/blob/master/Thesis_Anne_Smets.pdf).
