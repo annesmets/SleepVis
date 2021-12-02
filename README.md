@@ -9,8 +9,8 @@ The input shoudl be a JSON file of the following format:
     "Longitude": 5.4399474, 
     "slaapkwaliteit": 0.9137806375, 
     "uitgerust": 0.6600942871, 
-    "latitude": 51.4330172, 
-    "longitude": 5.4895835, 
+    "Latitude": 51.4330172, 
+    "Longitude": 5.4895835, 
     "states": [
       {"state": "awakeInBed_on", "start": "2021-08-21 23:35:00", "end": "2021-08-21 23:45:00"}, 
       {"state": "awakeInBed_off", "start": "2021-08-21 23:45:00", "end": "2021-08-21 23:50:00"}, 
