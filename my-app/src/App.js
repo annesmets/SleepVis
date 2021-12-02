@@ -21,7 +21,7 @@ import TagifyInput from './Components/TagifyInput';
 
 const App = () => {
   // Get data
-  const url = 'https://gist.githubusercontent.com/annesmets/a6800e8518d655a091f2d8a5c5036a59/raw/6073957ff2087be517842e0109afbfdd32751e44/sleepvis_example.json'
+  const url = 'https://gist.githubusercontent.com/annesmets/a6800e8518d655a091f2d8a5c5036a59/raw/12b6cb9cba904d87c27f48e929084c34ad95d4a9/sleepvis_example.json';
     
   const [data, setData] = useState([]);                                     //Data
   const [filterMasks, setFilterMasks] = useState({});                       //The mask that contains all filters
@@ -151,7 +151,7 @@ const App = () => {
         d.Longitude_zip = +d.Longitude,
         d.zip = +d.zip,
         d.dist = d.zip === 0 ? 0 : distance(51.44873543911078, 5.374131755515852, d.Latitude_zip, d.Longitude_zip),
-        d.client_id = +d.patient_id,
+        d.client_id = +d.client_id,
         d.id = +d.id,
         d.lights_off = new Date(d.lights_off),
         d.lights_on = new Date(d.lights_on),
