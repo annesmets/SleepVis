@@ -1,6 +1,7 @@
 # SleepVis
 
 The input shoudl be a JSON file of the following format:
+```
 [
   {"id": 5960, 
     "patient_id": 1144, 
@@ -18,3 +19,4 @@ The input shoudl be a JSON file of the following format:
     "lights_off": "2021-08-21 23:45:00", 
     "lights_on": "2021-08-22 07:35:00"}
 ]
+```
